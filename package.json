@@ -1,0 +1,83 @@
+{
+  "name": "recycle",
+  "version": "0.0.0",
+  "description": "An unofficial Recycle CLI to generate an iCal file.",
+  "repository": "https://github.com/gquittet/recycle-cli",
+  "license": "MIT",
+  "author": {
+    "email": "contact@v01dsocity.com",
+    "name": "Guillaume Qode",
+    "url": "https://v01dsocity.com"
+  },
+  "keywords": [
+    "recycle",
+    "ical",
+    "cli",
+    "gqode"
+  ],
+  "bin": "dist/cli.js",
+  "type": "module",
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist/",
+    "build": "tsc",
+    "prepublish": "npm run build && npm run test",
+    "dev": "tsc --watch",
+    "format": "prettier --write .",
+    "test": "prettier --check . && xo"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "axios": "^1.4.0",
+    "axios-retry": "^3.5.0",
+    "ink": "^4.1.0",
+    "ink-link": "^3.0.0",
+    "ink-select-input": "^5.0.0",
+    "ink-spinner": "^5.0.0",
+    "ink-text-input": "^5.0.1",
+    "luxon": "^3.3.0",
+    "meow": "^11.0.0",
+    "node-geocoder": "^4.2.0",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^3.0.1",
+    "@types/luxon": "^3.3.0",
+    "@types/node-geocoder": "^4.2.1",
+    "@types/react": "^18.0.32",
+    "chalk": "^5.2.0",
+    "eslint-config-xo-react": "^0.27.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "ink-testing-library": "^3.0.0",
+    "prettier": "^2.8.7",
+    "rimraf": "^5.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.3",
+    "xo": "^0.54.2"
+  },
+  "ava": {
+    "extensions": {
+      "ts": "module",
+      "tsx": "module"
+    },
+    "nodeArguments": [
+      "--loader=ts-node/esm"
+    ]
+  },
+  "xo": {
+    "extends": "xo-react",
+    "prettier": true,
+    "rules": {
+      "react/prop-types": "off",
+      "capitalized-comments": "off",
+      "unicorn/prefer-node-protocol": "off",
+      "unicorn/prefer-top-level-await": "off",
+      "@typescript-eslint/restrict-template-expressions": "off"
+    }
+  }
+}

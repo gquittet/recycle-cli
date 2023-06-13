@@ -1,0 +1,9 @@
+{
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "editorconfig": true,
+  "htmlWhitespaceSensitivity": "ignore",
+  "printWidth": 100,
+  "singleQuote": false,
+  "trailingComma": "all"
+}
