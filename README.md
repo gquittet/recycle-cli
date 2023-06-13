@@ -2,16 +2,6 @@
 
 An unofficial Recycle (https://www.recycleapp.be/) CLI to generate an iCal file.
 
-- [Recycle CLI](#recycle-cli)
-  - [Features](#features)
-  - [Demo](#demo)
-  - [Install](#install)
-    - [Release](#release)
-      - [Requirements](#requirements)
-    - [Latest development](#latest-development)
-      - [Requirements](#requirements-1)
-  - [CLI](#cli)
-
 ## Features
 
 ✔ Display a notification the day before  
@@ -23,37 +13,33 @@ An unofficial Recycle (https://www.recycleapp.be/) CLI to generate an iCal file.
 
 https://github.com/gquittet/recycle-cli/assets/11082739/39b16d2b-0311-4312-b667-7397bdaa06d6
 
+<img src="./assets/demo.gif" alt="Demonstration">
+
 ## Install
 
-### Release
+NodeJS >= 16
 
-#### Requirements
+```shell
+npm install -g recycle-cli
+```
 
-- NodeJS >= 16
+## Run
 
 ```shell
 npx recycle
 ```
 
-### Latest development
+### Contribute
 
 #### Requirements
 
 - Git
 - NodeJS >= 16
+- PNPM
 
 ```shell
 git clone https://github.com/gquittet/recycle-cli
-npm install
-npm run build
-node dist/cli.js # or ./dist/cli.js
-```
-
-## CLI
-
-```
-$ ./recycle --help
-
-  Usage
-    $ recycle
+pnpm install
+pnpm run build
+node dist/cli.js
 ```

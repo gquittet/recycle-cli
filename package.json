@@ -24,8 +24,9 @@
   },
   "scripts": {
     "prebuild": "rimraf dist/",
-    "build": "tsc",
+    "preversion": "npm run build && npm run test",
     "prepublish": "npm run build && npm run test",
+    "build": "tsc",
     "dev": "tsc --watch",
     "format": "prettier --write .",
     "test": "prettier --check . && xo"
