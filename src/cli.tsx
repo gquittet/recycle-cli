@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import { render } from "ink";
 import Spinner from "ink-spinner";
 import meow from "meow";

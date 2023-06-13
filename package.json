@@ -24,6 +24,7 @@
   },
   "scripts": {
     "prebuild": "rimraf dist/",
+    "postbuild": "chmod +x dist/cli.js",
     "preversion": "npm run build && npm run test",
     "prepublish": "npm run build && npm run test",
     "build": "tsc",
