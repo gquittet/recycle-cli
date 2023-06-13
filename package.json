@@ -1,5 +1,5 @@
 {
-  "name": "recycle",
+  "name": "recycle-cli",
   "version": "0.0.0",
   "description": "An unofficial Recycle CLI to generate an iCal file.",
   "repository": "https://github.com/gquittet/recycle-cli",
@@ -15,7 +15,9 @@
     "cli",
     "gqode"
   ],
-  "bin": "dist/cli.js",
+  "bin": {
+    "recycle": "dist/cli.js"
+  },
   "type": "module",
   "engines": {
     "node": ">=16"

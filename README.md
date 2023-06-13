@@ -7,8 +7,9 @@ An unofficial Recycle (https://www.recycleapp.be/) CLI to generate an iCal file.
   - [Demo](#demo)
   - [Install](#install)
     - [Release](#release)
-    - [Latest development](#latest-development)
       - [Requirements](#requirements)
+    - [Latest development](#latest-development)
+      - [Requirements](#requirements-1)
   - [CLI](#cli)
 
 ## Features
@@ -26,7 +27,13 @@ https://github.com/gquittet/recycle-cli/assets/11082739/39b16d2b-0311-4312-b667-
 
 ### Release
 
-Just download it from release section.
+#### Requirements
+
+- NodeJS >= 16
+
+```shell
+npx recycle
+```
 
 ### Latest development
 
