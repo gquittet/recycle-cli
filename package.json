@@ -15,9 +15,7 @@
     "cli",
     "gqode"
   ],
-  "bin": {
-    "recycle": "dist/cli.js"
-  },
+  "bin": "dist/cli.js",
   "type": "module",
   "engines": {
     "node": ">=16"

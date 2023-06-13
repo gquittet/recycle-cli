@@ -14,7 +14,7 @@ Require NodeJS >= 16
 ## Run
 
 ```shell
-npx recycle
+npx recycle-cli
 ```
 
 ## Demonstration
