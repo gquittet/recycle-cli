@@ -10,7 +10,7 @@ import App from "./app.js";
 meow(
   `
 	Usage
-	  $ recycle
+	  $ recycle-cli
 `,
   {
     importMeta: import.meta,
