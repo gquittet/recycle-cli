@@ -1,6 +1,6 @@
 {
   "name": "recycle-cli",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "An unofficial Recycle CLI to generate an iCal file.",
   "repository": "https://github.com/gquittet/recycle-cli",
   "license": "MIT",
