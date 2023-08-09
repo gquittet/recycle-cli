@@ -8,7 +8,7 @@ import { recycleService } from "./api.js";
 import { toFile } from "./ical.js";
 import { reducer } from "./utils.js";
 
-const isPostalCodeValid = (code: number) => code >= 100 && code <= 9999;
+const isPostalCodeValid = (code: number) => code >= 1000 && code <= 9999;
 
 type ActiveStep =
   | "ENTER_POSTAL_CODE"
