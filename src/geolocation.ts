@@ -82,6 +82,14 @@ export const computeWeight = async (
   url.searchParams.append("steps", "false");
 
   const { data } = await axios.get<Route>(url.toString(), {});
+
+  if (!data?.routes) {
+    // cSpell:disable
+    throw new Error(
+      `Unable to find a route using OpenStreetMap routing API using the given coordinates: ${start.longitude},${start.latitude};${end.longitude},${end.latitude}`,
+    );
+  }
+
   const { duration, distance, weight } = data.routes[0]!;
   return duration + distance + weight;
 };
