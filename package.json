@@ -35,31 +35,31 @@
     "dist"
   ],
   "dependencies": {
-    "axios": "^1.4.0",
-    "axios-retry": "^3.5.0",
-    "ink": "^4.1.0",
-    "ink-link": "^3.0.0",
-    "ink-select-input": "^5.0.0",
+    "axios": "^1.7.2",
+    "axios-retry": "^4.4.1",
+    "ink": "^5.0.1",
+    "ink-link": "^4.0.0",
+    "ink-select-input": "^6.0.0",
     "ink-spinner": "^5.0.0",
-    "ink-text-input": "^5.0.1",
-    "luxon": "^3.3.0",
-    "meow": "^11.0.0",
-    "react": "^18.2.0"
+    "ink-text-input": "^6.0.0",
+    "luxon": "^3.4.4",
+    "meow": "^13.2.0",
+    "react": "^18.3.1"
   },
   "devDependencies": {
-    "@sindresorhus/tsconfig": "^3.0.1",
-    "@types/luxon": "^3.3.0",
-    "@types/react": "^18.0.32",
-    "chalk": "^5.2.0",
+    "@sindresorhus/tsconfig": "^6.0.0",
+    "@types/luxon": "^3.4.2",
+    "@types/react": "^18.3.3",
+    "chalk": "^5.3.0",
     "eslint-config-xo-react": "^0.27.0",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "ink-testing-library": "^3.0.0",
-    "prettier": "^2.8.7",
-    "rimraf": "^5.0.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.3",
-    "xo": "^0.54.2"
+    "eslint-plugin-react": "^7.34.3",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "ink-testing-library": "^4.0.0",
+    "prettier": "^3.3.2",
+    "rimraf": "^5.0.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3",
+    "xo": "^0.58.0"
   },
   "ava": {
     "extensions": {

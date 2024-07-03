@@ -1,7 +1,6 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
 
-// @ts-expect-error because axios-retry use ESM and does not declare correctly the default export in package.json
 axiosRetry(axios, {
   retries: 3,
   retryDelay() {
