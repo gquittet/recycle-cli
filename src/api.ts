@@ -69,32 +69,19 @@ type Collection = {
 };
 
 type RecyPark = {
-  id: string;
-  active: boolean;
-  latitude: number;
-  longitude: number;
-  zipcode: string;
-  city: string;
-  street: string;
-  houseNumber: string;
-  busNumber: string;
-  externalId: string;
-  source: string;
-  deleted: boolean;
-  createdAt: string;
-  updatedAt: string;
-  type: {
-    admin: boolean;
-    createdAt: string;
-    id: string;
-    key: string;
-    name: {
-      nl: string;
-      fr: string;
-      de: string;
-      en: string;
-    };
-    updatedAt: string;
+  id: number;
+  name: string;
+  lat: number;
+  lng: number;
+  content: string;
+  image: string;
+  location: {
+    lat: number;
+    lon: number;
+  };
+  data: {
+    id: number;
+    tooltip: string;
   };
 };
 
@@ -160,67 +147,41 @@ export const recycleService = (token: string) => ({
     }));
   },
 
+  // eslint-disable-next-line unicorn/prevent-abbreviations
   async listRecyparks(args: { postalCode: string; street: string; house: number }) {
     const address = `${args.street} ${args.house} ${args.postalCode}`;
     const { longitude, latitude } = await localize(address);
 
-    if (!latitude || !longitude) return [];
+    const url = new URL("https://www.intradel.be/service/park/find");
+    url.searchParams.append("lat", latitude.toString());
+    url.searchParams.append("lon", longitude.toString());
 
-    const { data: collectionPoints } = await axios.get<Array<{ key: string; id: string }>>(
-      `${recycleApi}/collection-point-types`,
-      {
-        headers: {
-          authorization: token,
-          "X-Consumer": "recycleapp.be",
-        },
-      },
-    );
+    const { data } = await axios.get<RecyPark[]>(url.toString());
 
-    const recyparkType = collectionPoints.find(point => point.key === "recycling-park")!;
-
-    if (!recyparkType) return [];
-
-    const url = new URL(`${recycleApi}/collection-points`);
-    url.searchParams.append("bottomLeftLatitude", (latitude - 0.075).toFixed(2));
-    url.searchParams.append("bottomLeftLongitude", (longitude - 0.075).toFixed(2));
-    url.searchParams.append("topRightLatitude", (latitude + 0.075).toFixed(2));
-    url.searchParams.append("topRightLongitude", (longitude + 0.075).toFixed(2));
-    url.searchParams.append("types", recyparkType.id);
-    url.searchParams.append("size", "200");
-
-    const { data } = await handlePagination(url, async uriWithPagination =>
-      axios.get<Paginated<RecyPark>>(uriWithPagination, {
-        headers: {
-          authorization: token,
-          "X-Consumer": "recycleapp.be",
-        },
-      }),
-    );
+    console.log(data[0]);
 
     // Return recypark sort from nearest to farthest
     const weights = await Promise.all(
-      data.items.map(async item =>
-        computeWeight(
-          { latitude, longitude },
-          { latitude: item.latitude, longitude: item.longitude },
-        ),
+      data.map(async item =>
+        computeWeight({ latitude, longitude }, { latitude: item.lat, longitude: item.lng }),
       ),
     );
 
-    return data.items
+    return data
       .map((item, index) => ({ ...item, weight: weights[index]! }))
       .sort((a, b) => a.weight - b.weight);
   },
 
+  // eslint-disable-next-line unicorn/prevent-abbreviations
   async getRecypark(args: { postalCode: string; street: string; house: number }) {
     const recyparks = await this.listRecyparks(args);
-    const recypark = recyparks.find(item => item.active && !item.deleted);
+    const recypark = recyparks.at(0);
 
     if (recypark) {
-      const name = capitalize(recypark.type.name.fr) + " " + capitalize(recypark.city);
+      const name = capitalize(recypark.name);
       return {
-        latitude: recypark.latitude,
-        longitude: recypark.longitude,
+        latitude: recypark.lat,
+        longitude: recypark.lng,
         name,
       };
     }
@@ -228,15 +189,16 @@ export const recycleService = (token: string) => ({
     return undefined;
   },
 
+  // eslint-disable-next-line unicorn/prevent-abbreviations
   async getCalendar(args: { postalCode: string; street: string; house: number; address: string }) {
     const url = new URL(`${recycleApi}/collections`);
     url.searchParams.append("zipcodeId", args.postalCode);
     url.searchParams.append("streetId", args.street);
     url.searchParams.append("houseNumber", args.house.toString());
-    url.searchParams.append("fromDate", DateTime.now().startOf("year").toISODate()!);
+    url.searchParams.append("fromDate", DateTime.now().startOf("year").toISODate());
     url.searchParams.append(
       "untilDate",
-      DateTime.now().plus({ year: 1 }).startOf("year").toISODate()!,
+      DateTime.now().plus({ year: 1 }).startOf("year").toISODate(),
     );
     url.searchParams.append("size", "200");
 
