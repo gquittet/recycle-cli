@@ -3,12 +3,14 @@ name: NPM Publish
 on:
   release:
     types: [published]
-  workflow_dispatch:
 
 jobs:
   publish-npm:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,9 +21,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          #cache: 'pnpm'
+          cache: 'pnpm'
           registry-url: https://registry.npmjs.org/
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm publish
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint code base
+        run: pnpm run test
+      - name: Publish package
+        run: pnpm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
