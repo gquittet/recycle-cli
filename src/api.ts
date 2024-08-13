@@ -158,8 +158,6 @@ export const recycleService = (token: string) => ({
 
     const { data } = await axios.get<RecyPark[]>(url.toString());
 
-    console.log(data[0]);
-
     // Return recypark sort from nearest to farthest
     const weights = await Promise.all(
       data.map(async item =>
