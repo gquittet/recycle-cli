@@ -28,8 +28,8 @@
     "prepublish": "npm run build && npm run test",
     "build": "tsc",
     "dev": "tsc --watch",
-    "format": "prettier --write .",
-    "test": "prettier --check . && xo"
+    "format": "prettier --write src/",
+    "test": "prettier --check src/ && xo"
   },
   "files": [
     "dist"
