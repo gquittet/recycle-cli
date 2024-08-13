@@ -9,7 +9,6 @@ on:
 
 jobs:
   publish-npm:
-    needs: test
     runs-on: ubuntu-24.04
     permissions:
       contents: read
