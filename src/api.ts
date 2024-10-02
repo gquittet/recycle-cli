@@ -1,7 +1,6 @@
 import axios, { type AxiosResponse } from "axios";
 import { DateTime } from "luxon";
 import { computeWeight, localize } from "./geolocation.js";
-import { capitalize } from "./utils.js";
 
 type Auth = {
   expiresAt: string;
@@ -69,20 +68,17 @@ type Collection = {
 };
 
 type RecyPark = {
-  id: number;
-  name: string;
-  lat: number;
-  lng: number;
-  content: string;
-  image: string;
-  location: {
+  version: number;
+  generator: string;
+  osm3s: {
+    timestamp_osm_base: string;
+    copyright: string;
+  };
+  elements: {
+    id: number;
     lat: number;
     lon: number;
-  };
-  data: {
-    id: number;
-    tooltip: string;
-  };
+  }[];
 };
 
 const recycleApi = "https://api.fostplus.be/recyclecms/app/v1";
@@ -152,20 +148,26 @@ export const recycleService = (token: string) => ({
     const address = `${args.street} ${args.house} ${args.postalCode}`;
     const { longitude, latitude } = await localize(address);
 
-    const url = new URL("https://www.intradel.be/service/park/find");
-    url.searchParams.append("lat", latitude.toString());
-    url.searchParams.append("lon", longitude.toString());
+    const url = new URL("https://overpass-api.de/api/interpreter");
+    const body = `
+        [out:json];
+        (
+          node["amenity"="recycling"]["recycling_type"="centre"]["ownership"!="private"](around:10000,${latitude},${longitude});
+          node["amenity"="recycling"]["recycling_type"="container"]["recycling:wood"="yes"]["recycling:green_waste"="yes"]["ownership"!="private"](around:10000,${latitude},${longitude});
+        );
+        out qt;
+      `;
 
-    const { data } = await axios.get<RecyPark[]>(url.toString());
+    const { data } = await axios.post<RecyPark>(url.toString(), body);
 
     // Return recypark sort from nearest to farthest
     const weights = await Promise.all(
-      data.map(async item =>
-        computeWeight({ latitude, longitude }, { latitude: item.lat, longitude: item.lng }),
+      data.elements.map(async item =>
+        computeWeight({ latitude, longitude }, { latitude: item.lat, longitude: item.lon }),
       ),
     );
 
-    return data
+    return data.elements
       .map((item, index) => ({ ...item, weight: weights[index]! }))
       .sort((a, b) => a.weight - b.weight);
   },
@@ -176,11 +178,10 @@ export const recycleService = (token: string) => ({
     const recypark = recyparks.at(0);
 
     if (recypark) {
-      const name = capitalize(recypark.name);
       return {
         latitude: recypark.lat,
-        longitude: recypark.lng,
-        name,
+        longitude: recypark.lon,
+        name: "Recyparc",
       };
     }
 

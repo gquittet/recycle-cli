@@ -54,8 +54,8 @@ export const localize = async (address: string) => {
   }
 
   return {
-    longitude: Number.parseInt(data[0].lon, 10),
-    latitude: Number.parseInt(data[0].lat, 10),
+    longitude: Math.floor(Number.parseFloat(data[0].lon) * 1_000) / 1_000,
+    latitude: Math.floor(Number.parseFloat(data[0].lat) * 1_000) / 1_000,
   };
 };
 
