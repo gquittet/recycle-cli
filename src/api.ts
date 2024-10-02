@@ -74,11 +74,11 @@ type RecyPark = {
     timestamp_osm_base: string;
     copyright: string;
   };
-  elements: {
+  elements: Array<{
     id: number;
     lat: number;
     lon: number;
-  }[];
+  }>;
 };
 
 const recycleApi = "https://api.fostplus.be/recyclecms/app/v1";
