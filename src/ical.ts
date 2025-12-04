@@ -1,4 +1,4 @@
-import { createWriteStream } from "fs";
+import { createWriteStream } from "node:fs";
 import { DateTime } from "luxon";
 
 export const toFile = async <
@@ -6,12 +6,12 @@ export const toFile = async <
 >(
   collection: T[][],
   recypark?: { latitude: number; longitude: number; name: string },
-) => {
-  return new Promise<void>((resolve, reject) => {
+) =>
+  new Promise<void>((resolve, reject) => {
     // prettier-ignore
     const recyparkLink = recypark
-			? `https://maps.apple.com/?ll=${recypark.latitude},${recypark.longitude}&q=${encodeURIComponent(recypark.name)}`
-			: '';
+      ? `https://maps.apple.com/?ll=${recypark.latitude},${recypark.longitude}&q=${encodeURIComponent(recypark.name)}`
+      : '';
 
     const writer = createWriteStream("recycle.ics");
     writer.write(startIcal());
@@ -31,16 +31,14 @@ export const toFile = async <
       resolve();
     });
   });
-};
 
-export const startIcal = () => {
+export const startIcal = () =>
   // noinspection SpellCheckingInspection
-  return `BEGIN:VCALENDAR
+  `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:www.example.com
 X-PUBLISHED-TTL:P1W
 `;
-};
 
 export const createEvent = <
   T extends { label: string; timestamp: Date; value: string; address: string },
@@ -51,8 +49,8 @@ export const createEvent = <
   if (items.length === 0) return "";
 
   const id = items.map(({ value }) => value).join("-");
-  const description = items.map(({ label }) => `- ${label}`).join("\\n");
-  const location = items[0]!.address.replace(",", "\\,");
+  const description = items.map(({ label }) => `- ${label}`).join(String.raw`\n`);
+  const location = items[0]!.address.replace(",", String.raw`\,`);
 
   const timestamp = DateTime.fromJSDate(items[0]!.timestamp);
   const day = timestamp.toISODate({

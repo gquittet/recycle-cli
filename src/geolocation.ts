@@ -1,12 +1,4 @@
-import axios from "axios";
-import axiosRetry from "axios-retry";
-
-axiosRetry(axios, {
-  retries: 3,
-  retryDelay() {
-    return 1000;
-  },
-});
+import { apiClient } from "./api.js";
 
 export type OpenStreetMapResult = {
   place_id: number;
@@ -46,7 +38,7 @@ export const localize = async (address: string) => {
   url.searchParams.append("q", address);
   url.searchParams.append("format", "json");
 
-  const { data } = await axios.get<OpenStreetMapResult[]>(url.toString());
+  const { data } = await apiClient.get<OpenStreetMapResult[]>(url.toString());
 
   if (data.length === 0 || !data[0]) {
     // cSpell:disable
@@ -80,7 +72,7 @@ export const computeWeight = async (
   url.searchParams.append("alternatives", "false");
   url.searchParams.append("steps", "false");
 
-  const { data } = await axios.get<Route>(url.toString(), {});
+  const { data } = await apiClient.get<Route>(url.toString(), {});
 
   if (!data?.routes) {
     // cSpell:disable

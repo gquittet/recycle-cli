@@ -2,7 +2,7 @@
 
 An unofficial Recycle (https://www.recycleapp.be/) CLI to generate an iCal file.
 
-Require NodeJS >= 18
+Require NodeJS >= 20
 
 ## Features
 

@@ -1,6 +1,22 @@
+import { readFileSync } from "node:fs";
 import axios, { type AxiosResponse } from "axios";
+import axiosRetry from "axios-retry";
 import { DateTime } from "luxon";
 import { computeWeight, localize } from "./geolocation.js";
+
+const recycleCli = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+) as {
+  name: string;
+  version: string;
+};
+const userAgent = `Recycle-CLI/v${recycleCli.version} (+https://github.com/gquittet/recycle-cli; contact:contact@gqode.be)`;
+export const apiClient = axios.create({ headers: { "User-Agent": userAgent } });
+
+axiosRetry(apiClient, {
+  retries: 3,
+  retryDelay: retry => retry * 1000,
+});
 
 type Auth = {
   expiresAt: string;
@@ -88,7 +104,7 @@ const secret =
   "Op2tDi2pBmh1wzeC5TaN2U3knZan7ATcfOQgxh4vqC0mDKmnPP2qzoQusmInpglfIkxx8SZrasBqi5zgMSvyHggK9j6xCQNQ8xwPFY2o03GCcQfcXVOyKsvGWLze7iwcfcgk2Ujpl0dmrt3hSJMCDqzAlvTrsvAEiaSzC9hKRwhijQAFHuFIhJssnHtDSB76vnFQeTCCvwVB27DjSVpDmq8fWQKEmjEncdLqIsRnfxLcOjGIVwX5V0LBntVbeiBvcjyKF2nQ08rIxqHHGXNJ6SbnAmTgsPTg7k6Ejqa7dVfTmGtEPdftezDbuEc8DdK66KDecqnxwOOPSJIN0zaJ6k2Ye2tgMSxxf16gxAmaOUqHS0i7dtG5PgPSINti3qlDdw6DTKEPni7X0rxM";
 
 export const login = async () => {
-  const { data } = await axios.get<Auth>(`${recycleApi}/access-token`, {
+  const { data } = await apiClient.get<Auth>(`${recycleApi}/access-token`, {
     headers: {
       "X-Secret": secret,
       "X-Consumer": "recycleapp.be",
@@ -103,7 +119,7 @@ export const recycleService = (token: string) => ({
     url.searchParams.append("q", code.toString());
 
     const { data } = await handlePagination(url, async uriWithPagination =>
-      axios.get<Paginated<City>>(uriWithPagination, {
+      apiClient.get<Paginated<City>>(uriWithPagination, {
         headers: {
           authorization: token,
           "X-Consumer": "recycleapp.be",
@@ -125,7 +141,7 @@ export const recycleService = (token: string) => ({
     url.searchParams.append("zipcodes", zipCodeId);
 
     const { data } = await handlePagination(url, async uriWithPagination =>
-      axios.post<Paginated<Street>>(
+      apiClient.post<Paginated<Street>>(
         uriWithPagination,
         {},
         {
@@ -143,7 +159,6 @@ export const recycleService = (token: string) => ({
     }));
   },
 
-  // eslint-disable-next-line unicorn/prevent-abbreviations
   async listRecyparks(args: { postalCode: string; street: string; house: number }) {
     const address = `${args.street} ${args.house} ${args.postalCode}`;
     const { longitude, latitude } = await localize(address);
@@ -158,7 +173,7 @@ export const recycleService = (token: string) => ({
         out qt;
       `;
 
-    const { data } = await axios.post<RecyPark>(url.toString(), body);
+    const { data } = await apiClient.post<RecyPark>(url.toString(), body);
 
     // Return recypark sort from nearest to farthest
     const weights = await Promise.all(
@@ -172,7 +187,6 @@ export const recycleService = (token: string) => ({
       .sort((a, b) => a.weight - b.weight);
   },
 
-  // eslint-disable-next-line unicorn/prevent-abbreviations
   async getRecypark(args: { postalCode: string; street: string; house: number }) {
     const recyparks = await this.listRecyparks(args);
     const recypark = recyparks.at(0);
@@ -188,7 +202,6 @@ export const recycleService = (token: string) => ({
     return undefined;
   },
 
-  // eslint-disable-next-line unicorn/prevent-abbreviations
   async getCalendar(args: { postalCode: string; street: string; house: number; address: string }) {
     const url = new URL(`${recycleApi}/collections`);
     url.searchParams.append("zipcodeId", args.postalCode);
@@ -202,7 +215,7 @@ export const recycleService = (token: string) => ({
     url.searchParams.append("size", "200");
 
     const { data } = await handlePagination(url, async uriWithPagination =>
-      axios.get<Paginated<Collection>>(uriWithPagination, {
+      apiClient.get<Paginated<Collection>>(uriWithPagination, {
         headers: {
           authorization: token,
           "X-Consumer": "recycleapp.be",

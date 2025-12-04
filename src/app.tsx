@@ -3,7 +3,8 @@ import Link from "ink-link";
 import SelectInput from "ink-select-input";
 import Spinner from "ink-spinner";
 import TextInput from "ink-text-input";
-import React, { useReducer, useState } from "react";
+import PropTypes from "prop-types";
+import { useReducer, useState } from "react";
 import { recycleService } from "./api.js";
 import { toFile } from "./ical.js";
 import { reducer } from "./utils.js";
@@ -160,7 +161,7 @@ export default function App({ token = "" }) {
             });
             await toFile(calendar, recypark);
             setActiveStep("FINISH");
-            exit();
+            setTimeout(exit, 100);
           }}
         />
       )}
@@ -194,3 +195,7 @@ export default function App({ token = "" }) {
     </Box>
   );
 }
+
+App.propTypes = {
+  token: PropTypes.string.isRequired,
+};

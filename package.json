@@ -5,9 +5,9 @@
   "repository": "https://github.com/gquittet/recycle-cli",
   "license": "MIT",
   "author": {
-    "email": "contact@v01dsocity.com",
+    "email": "contact@gqode.be",
     "name": "Guillaume Qode",
-    "url": "https://v01dsocity.com"
+    "url": "https://gqode.be"
   },
   "keywords": [
     "recycle",
@@ -19,7 +19,7 @@
   "bin": "dist/cli.js",
   "type": "module",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "prebuild": "rimraf dist/",
@@ -28,38 +28,41 @@
     "prepublish": "npm run build && npm run test",
     "build": "tsc",
     "dev": "tsc --watch",
-    "format": "prettier --write src/",
-    "test": "prettier --check src/ && xo"
+    "format": "prettier --write .",
+    "test": "xo && prettier --check . && xo"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "axios": "^1.7.7",
+    "axios": "^1.13.2",
     "axios-retry": "^4.5.0",
-    "ink": "^5.0.1",
-    "ink-link": "^4.1.0",
-    "ink-select-input": "^6.0.0",
+    "ink": "^6.5.1",
+    "ink-link": "^5.0.0",
+    "ink-select-input": "^6.2.0",
     "ink-spinner": "^5.0.0",
     "ink-text-input": "^6.0.0",
-    "luxon": "^3.5.0",
-    "meow": "^13.2.0",
-    "react": "^18.3.1"
+    "luxon": "^3.7.2",
+    "meow": "^14.0.0",
+    "prop-types": "^15.8.1",
+    "react": "^19.2.1"
   },
   "devDependencies": {
-    "@sindresorhus/tsconfig": "^6.0.0",
-    "@types/luxon": "^3.4.2",
-    "@types/react": "^18.3.11",
-    "chalk": "^5.3.0",
-    "eslint-config-xo-react": "^0.27.0",
-    "eslint-plugin-react": "^7.37.1",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "@sindresorhus/tsconfig": "^8.1.0",
+    "@types/luxon": "^3.7.1",
+    "@types/node": "^24.10.1",
+    "@types/prop-types": "^15.7.15",
+    "@types/react": "^19.2.7",
+    "chalk": "^5.6.2",
+    "eslint-config-xo-react": "^0.29.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "ink-testing-library": "^4.0.0",
-    "prettier": "^3.3.3",
-    "rimraf": "^6.0.1",
+    "prettier": "^3.7.4",
+    "rimraf": "^6.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.2",
-    "xo": "^0.59.3"
+    "typescript": "^5.9.3",
+    "xo": "^1.2.3"
   },
   "ava": {
     "extensions": {
@@ -69,16 +72,5 @@
     "nodeArguments": [
       "--loader=ts-node/esm"
     ]
-  },
-  "xo": {
-    "extends": "xo-react",
-    "prettier": true,
-    "rules": {
-      "react/prop-types": "off",
-      "capitalized-comments": "off",
-      "unicorn/prefer-node-protocol": "off",
-      "unicorn/prefer-top-level-await": "off",
-      "@typescript-eslint/restrict-template-expressions": "off"
-    }
   }
 }
